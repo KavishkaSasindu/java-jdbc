@@ -33,7 +33,23 @@ public class LogInServlet extends HttpServlet {
             Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection(URL,USERNAME,PASSWORD);
             pw.println(conn);
+
+            String sql = "INSERT INTO user(email,password) VALUES (?,?)";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+
+            stmt.setString(1,email);
+            stmt.setString(2,password);
+
+            int rowsInsert = stmt.executeUpdate();
+
+            if(rowsInsert>0){
+                pw.println("User LoggedIn");
+            }else{
+                pw.println("Error Occur");
+            }
+
         } catch(Exception e){
+            e.printStackTrace();
             pw.println(e.getMessage());
         }
 
